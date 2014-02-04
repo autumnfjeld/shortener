@@ -1,7 +1,6 @@
 # Rakefile -- this describes a set of commands
 # that can be run from the commandline and
-# declare depende
-ncies between tasks.
+# declare dependencies between tasks.
 
 require "./shortener"
 require 'rspec/core/rake_task'

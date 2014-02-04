@@ -10,9 +10,9 @@ class CreateLinks < ActiveRecord::Migration
     # PUT MIGRATION CODE HERE TO SETUP DATABASE
 
     def change
-      create_table :urlPairs do |t|
-        t.string :originalUrl
-        t.string :tinyUrl
+      create_table :url_pairs do |t|
+        t.string :original_url
+        t.string :teeny_url
 
         t.timestamps
       end

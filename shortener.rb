@@ -28,7 +28,7 @@ end
 # Define associations here if need be
 # http://guides.rubyonrails.org/association_basics.html
 
-class urlPair < ActiveRecord::Base
+class UrlPair < ActiveRecord::Base
 end
 
 ###########################################################
@@ -36,7 +36,7 @@ end
 ###########################################################
 
 get '/' do
-    @links = [] # FIXME
+    @links = [] # FIXME: should get database info
     erb :index
 end
 
@@ -45,15 +45,22 @@ get '/new' do
 end
 
 post '/new' do
-  'created a new Post!'
+  puts params[:url]
+  tinyurl(params[:url])  # params provides data in post request
   #need to access data from post
     # PUT CODE HERE TO CREATE NEW SHORTENED LINKS
 end
 
-def teenyurl(u) do
-  #compute teenycode
-  #add incoming url & teenycode pair to database
-  #return teenycode
+def tinyurl(origUrl)
+  #look in database to see if origUrl is already there
+  tinyUrl = 't'+rand(1000).to_s;
+  newpair = UrlPair.new ( { original_url: origUrl, tiny_url: tinyUrl})
+  if newpair.save
+    puts "newpair saved as #{newpair}"
+  else
+    puts "Failed???"
+  end
+  tinyUrl
 end
 
 # MORE ROUTES GO HERE
