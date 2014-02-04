@@ -6,6 +6,7 @@ require 'pry'
 # Configuration
 ###########################################################
 
+
 set :public_folder, File.dirname(__FILE__) + '/public'
 
 configure :development, :production do
@@ -27,7 +28,7 @@ end
 # Define associations here if need be
 # http://guides.rubyonrails.org/association_basics.html
 
-class Link < ActiveRecord::Base
+class urlPair < ActiveRecord::Base
 end
 
 ###########################################################
@@ -44,7 +45,15 @@ get '/new' do
 end
 
 post '/new' do
+  'created a new Post!'
+  #need to access data from post
     # PUT CODE HERE TO CREATE NEW SHORTENED LINKS
+end
+
+def teenyurl(u) do
+  #compute teenycode
+  #add incoming url & teenycode pair to database
+  #return teenycode
 end
 
 # MORE ROUTES GO HERE
