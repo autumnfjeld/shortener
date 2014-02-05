@@ -3,9 +3,12 @@
 <ul class="links">
 <% @links.each do |link| %>
   <li>
-    <a href="/<%= link.code %>"><%= link.code %></a>
+    <% shortened = "http://127.0.0.1:9393/#{link.tiny_url}" %>
+    <a href="<%= shortened %>"><%= shortened %>(<%= link.visits %>)</a>
   </li>
 <% end %>
 </ul>
 
 <a href="<%= url('/new') %>">Create new &rarr;</a>
+
+

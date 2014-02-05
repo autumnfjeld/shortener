@@ -1,5 +1,5 @@
 <form id='myForm'>
-    <input type='text' name="url">
+    <input type='text' name="original_url">
     <input type="submit" value="Shorten">
 </form>
 <div id="shortcode"></div>
@@ -13,7 +13,9 @@
   $(function() {
     $('#myForm').submit(function() {
     $.post('/new', $("#myForm").serialize(), function(data){
-      var $url = $('<a>', {href: data}).append(data);
+      console.log(data);
+      var shortened = 'http://127.0.0.1:9393/' + data;
+      var $url = $('<a>', {href: shortened}).append(shortened);
       var $shortcode = $('<div>').append("Your Code:").append($url);
       $('#shortcode').append($shortcode.hide().fadeIn());
       });
@@ -21,3 +23,6 @@
     });
   });
 </script>
+
+<!-- serialize in the post request creates special parsing behavior
+the 'name' value is used downstream when using parsed info-->

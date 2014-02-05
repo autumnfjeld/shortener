@@ -1,6 +1,7 @@
 require 'sinatra'
 require 'active_record'
 require 'pry'
+require 'digest/sha1'
 
 ###########################################################
 # Configuration
@@ -29,6 +30,15 @@ end
 # http://guides.rubyonrails.org/association_basics.html
 
 class UrlPair < ActiveRecord::Base
+  before_save do |record|
+    #record.tiny_url = 't'+rand(1000).to_s
+    record.tiny_url = (Digest::SHA1.hexdigest record.original_url)[0,10]
+  end
+
+  def increment_count
+    self.visits += 1
+    self.save
+  end
 end
 
 ###########################################################
@@ -36,7 +46,7 @@ end
 ###########################################################
 
 get '/' do
-    @links = [] # FIXME: should get database info
+    @links = UrlPair.all # FIXME: should get database info
     erb :index
 end
 
@@ -45,22 +55,20 @@ get '/new' do
 end
 
 post '/new' do
-  puts params[:url]
-  tinyurl(params[:url])  # params provides data in post request
-  #need to access data from post
-    # PUT CODE HERE TO CREATE NEW SHORTENED LINKS
+  puts "params #{params}"
+  record = UrlPair.find_or_create_by_original_url(params)
+  puts "our record??? #{record.inspect}"
+  puts "our json stuff: #{record.tiny_url.to_json}"
+  record.tiny_url
 end
 
-def tinyurl(origUrl)
-  #look in database to see if origUrl is already there
-  tinyUrl = 't'+rand(1000).to_s;
-  newpair = UrlPair.new ( { original_url: origUrl, tiny_url: tinyUrl})
-  if newpair.save
-    puts "newpair saved as #{newpair}"
-  else
-    puts "Failed???"
-  end
-  tinyUrl
+get '/:tiny' do
+  record = UrlPair.find_by_tiny_url(params[:tiny]);
+  record.increment_count
+  puts params[:tiny]
+  puts record.inspect
+  redirect to ("http://" + record.original_url)
 end
+
 
 # MORE ROUTES GO HERE
